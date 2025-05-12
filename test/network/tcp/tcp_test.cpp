@@ -100,7 +100,7 @@ TEST(TCP, AddToNetwork)
 
 			barrier_wait(start);
 
-			log_debug("test start");
+			log_info("test start");
 
 			for (auto n : list) {
 				if (!node_equal(&n, &node)) {
@@ -112,7 +112,7 @@ TEST(TCP, AddToNetwork)
 			struct node_id *nodes = get_network(&size);
 			EXPECT_TRUE_OR_EXIT(nodes != NULL);
 
-			// log_debug("%d == %zu", size, list.size());
+			// log_info("%d == %zu", size, list.size());
 			for (int v = 0; v < list.size(); v++) {
 				bool find = false;
 				for (int j = 0; j < size; j++) {
@@ -125,18 +125,18 @@ TEST(TCP, AddToNetwork)
 			}
 			free(nodes);
 
-			log_debug("node %s:%d reach", node.host, node.port);
+			log_info("node %s:%d reach", node.host, node.port);
 
 			EXPECT_TRUE_OR_EXIT(size == list.size());
 
 			barrier_wait(end);
 
-			log_debug("test end");
+			log_info("test end");
 
 			EXPECT_TRUE_OR_EXIT(exit_network() == 0);
 			EXPECT_TRUE_OR_EXIT(exit_comm() == 0);
 
-			log_debug("network clean");
+			log_info("network clean");
 
 			_exit(0);
 		}
@@ -189,7 +189,7 @@ TEST(TCP, RemoveFromNetwork)
 
 			barrier_wait(start);
 
-			log_debug("start");
+			log_info("start");
 
 			//add all node to network
 			for (auto n : list) {
@@ -230,12 +230,12 @@ TEST(TCP, RemoveFromNetwork)
 
 			barrier_wait(end);
 
-			log_debug("test end");
+			log_info("test end");
 
 			EXPECT_TRUE_OR_EXIT(exit_network() == 0);
 			EXPECT_TRUE_OR_EXIT(exit_comm() == 0);
 
-			log_debug("network clean");
+			log_info("network clean");
 
 			_exit(0);
 		}
@@ -251,7 +251,7 @@ pthread_mutex_t handlermutex = PTHREAD_MUTEX_INITIALIZER;
 bool ready = false;
 static void handler_test(struct node_id *sender, void *payload)
 {
-	log_debug("message handle");
+	log_info("message handle");
 	EXPECT_TRUE_OR_EXIT(*(int *)payload == 1);
 	ready = true;
 	pthread_cond_broadcast(&waithandler);
@@ -282,7 +282,7 @@ TEST(TCP, SendToNode)
 
 			barrier_wait(start);
 
-			log_debug("test start");
+			log_info("test start");
 
 			EXPECT_TRUE_OR_EXIT(
 				add_to_network(&list[i % list.size()]) == 0);
@@ -317,11 +317,11 @@ int verif = 0;
 int count = 0;
 static void handlerFIFO(struct node_id *sender, void *payload)
 {
-	log_debug("handler receive %d", *(int *)payload);
+	log_info("handler receive %d", *(int *)payload);
 	usleep(500);
 	count++;
 	verif = *(int *)payload;
-	log_debug("handler finish");
+	log_info("handler finish");
 	pthread_cond_broadcast(&waithandler);
 }
 
@@ -355,7 +355,7 @@ TEST(TCP, TESTFIFO)
 		EXPECT_TRUE_OR_EXIT(add_to_network(&parent) == 0);
 
 		for (int i = 0; i < msg_send; i++) {
-			// log_debug("send %d", i);
+			// log_info("send %d", i);
 			EXPECT_TRUE_OR_EXIT(
 				send_message1(0, &parent, &i, sizeof(i)) == 0);
 		}

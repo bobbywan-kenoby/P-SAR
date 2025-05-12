@@ -6,7 +6,7 @@
 #include "utils/message_type.h"
 #include "submodule/protocol.h"
 #include "utils/list.h"
-// #define ERROR_LOG
+#define ERROR_LOG
 #include "utils/logger.h"
 #include "network/utils/cleanup.h"
 #include <stddef.h>
